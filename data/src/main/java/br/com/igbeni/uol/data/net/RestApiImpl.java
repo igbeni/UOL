@@ -5,11 +5,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import java.net.MalformedURLException;
+import java.util.List;
 
-import br.com.igbeni.uol.data.entity.FeedEntity;
+import br.com.igbeni.uol.data.entity.FeedItemEntity;
 import br.com.igbeni.uol.data.entity.mapper.FeedEntityJsonMapper;
 import br.com.igbeni.uol.data.exception.NetworkConnectionException;
-import io.reactivex.Observable;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 
 /**
  * {@link RestApi} implementation for retrieving data from the network.
@@ -22,7 +24,7 @@ public class RestApiImpl implements RestApi {
     /**
      * Constructor of the class
      *
-     * @param context                  {@link Context}.
+     * @param context              {@link Context}.
      * @param feedEntityJsonMapper
      */
     public RestApiImpl(Context context, FeedEntityJsonMapper feedEntityJsonMapper) {
@@ -50,13 +52,13 @@ public class RestApiImpl implements RestApi {
     }
 
     @Override
-    public Observable<FeedEntity> feedEntity() {
-        return Observable.create(emitter -> {
+    public Flowable<List<FeedItemEntity>> feedItemEntities() {
+        return Flowable.create(emitter -> {
             if (isThereInternetConnection()) {
                 try {
                     String responseFeedEntity = getFeedEntityFromApi();
                     if (responseFeedEntity != null) {
-                        emitter.onNext(feedEntityJsonMapper.transformFromEntity(responseFeedEntity));
+                        emitter.onNext(feedEntityJsonMapper.transformToListFromEntity(responseFeedEntity));
                         emitter.onComplete();
                     } else {
                         emitter.onError(new NetworkConnectionException());
@@ -67,7 +69,7 @@ public class RestApiImpl implements RestApi {
             } else {
                 emitter.onError(new NetworkConnectionException());
             }
-        });
+        }, BackpressureStrategy.BUFFER);
     }
 
     private String getFeedEntityFromApi() throws MalformedURLException {

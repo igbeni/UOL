@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">UOL</string>
 
+    <string name="btn_text_retry">Retry</string>
+
     //Exception messages
     <string name="exception_message_generic">There was an application error</string>
+    <string name="exception_message_no_connection">There is no internet connection</string>
+    <string name="exception_message_feed_item_not_found">Cannot retrieve feed item data. Check your internet connection</string>
 </resources>

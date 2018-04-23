@@ -25,14 +25,16 @@ public class JobExecutor implements ThreadExecutor {
                 new LinkedBlockingQueue<>(), new JobThreadFactory());
     }
 
-    @Override public void execute(@NonNull Runnable runnable) {
+    @Override
+    public void execute(@NonNull Runnable runnable) {
         this.threadPoolExecutor.execute(runnable);
     }
 
     private static class JobThreadFactory implements ThreadFactory {
         private int counter = 0;
 
-        @Override public Thread newThread(@NonNull Runnable runnable) {
+        @Override
+        public Thread newThread(@NonNull Runnable runnable) {
             return new Thread(runnable, "android_" + counter++);
         }
     }

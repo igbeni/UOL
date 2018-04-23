@@ -1,26 +1,29 @@
 package br.com.igbeni.uol.presenter;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import br.com.igbeni.uol.domain.Feed;
+import br.com.igbeni.uol.domain.FeedItem;
 import br.com.igbeni.uol.domain.exception.DefaultErrorBundle;
 import br.com.igbeni.uol.domain.exception.ErrorBundle;
-import br.com.igbeni.uol.domain.interactor.DefaultObserver;
 import br.com.igbeni.uol.domain.interactor.GetFeed;
 import br.com.igbeni.uol.exception.ErrorMessageFactory;
 import br.com.igbeni.uol.internal.di.PerActivity;
 import br.com.igbeni.uol.mapper.FeedModelDataMapper;
+import br.com.igbeni.uol.model.FeedItemModel;
 import br.com.igbeni.uol.model.FeedModel;
 import br.com.igbeni.uol.view.FeedView;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 @PerActivity
 public class FeedPresenter implements Presenter {
 
-    private FeedView viewFeedView;
-
     private final GetFeed getFeedUseCase;
     private final FeedModelDataMapper feedModelDataMapper;
+    private FeedView viewFeedView;
 
     @Inject
     public FeedPresenter(GetFeed getFeedUseCase, FeedModelDataMapper feedModelDataMapper) {
@@ -59,7 +62,11 @@ public class FeedPresenter implements Presenter {
     private void loadUserList() {
         this.hideViewRetry();
         this.showViewLoading();
-        this.getUserList();
+        this.getFeedList();
+    }
+
+    public void onUserClicked(FeedItemModel feedItemModel) {
+        this.viewFeedView.viewFeedItem(feedItemModel);
     }
 
     private void showViewLoading() {
@@ -89,11 +96,16 @@ public class FeedPresenter implements Presenter {
         this.viewFeedView.renderFeed(feedModel);
     }
 
-    private void getUserList() {
+    private void showFeedItemsInView(List<FeedItem> feedItems) {
+        final List<FeedItemModel> feedItemModels = this.feedModelDataMapper.transform(feedItems);
+        this.viewFeedView.renderFeedItems(feedItemModels);
+    }
+
+    private void getFeedList() {
         this.getFeedUseCase.execute(new FeedObserver(), null);
     }
 
-    private final class FeedObserver extends DefaultObserver<Feed> {
+    private final class FeedObserver extends DisposableSubscriber<List<FeedItem>> {
 
         @Override
         public void onComplete() {
@@ -101,15 +113,15 @@ public class FeedPresenter implements Presenter {
         }
 
         @Override
+        public void onNext(List<FeedItem> feedItems) {
+            FeedPresenter.this.showFeedItemsInView(feedItems);
+        }
+
+        @Override
         public void onError(Throwable e) {
             FeedPresenter.this.hideViewLoading();
             FeedPresenter.this.showErrorMessage(new DefaultErrorBundle((Exception) e));
             FeedPresenter.this.showViewRetry();
-        }
-
-        @Override
-        public void onNext(Feed feed) {
-            FeedPresenter.this.showFeedInView(feed);
         }
     }
 }

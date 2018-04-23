@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import br.com.igbeni.uol.domain.FeedItem;
-
 public class FeedEntity {
 
     @SerializedName("feed")

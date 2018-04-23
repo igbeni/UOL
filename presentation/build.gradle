@@ -38,13 +38,15 @@ dependencies {
 
     implementation presentationDependencies.appCompatV7
 
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support:design:27.1.1'
     annotationProcessor presentationDependencies.daggerCompiler
     annotationProcessor presentationDependencies.daggerProcessor
     implementation presentationDependencies.dagger
     implementation presentationDependencies.daggerSupport
 
     implementation presentationDependencies.butterKnife
-    annotationProcessor  presentationDependencies.butterKnifeCompiler
+    annotationProcessor presentationDependencies.butterKnifeCompiler
 
     implementation presentationDependencies.recyclerView
     implementation presentationDependencies.rxJava

@@ -11,7 +11,6 @@ import br.com.igbeni.uol.AndroidApplication;
 import br.com.igbeni.uol.internal.di.components.ApplicationComponent;
 import br.com.igbeni.uol.internal.di.modules.ActivityModule;
 import br.com.igbeni.uol.navigation.Navigator;
-import dagger.android.AndroidInjection;
 
 /**
  * Base {@link AppCompatActivity} class for every Activity in this application.

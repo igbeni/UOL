@@ -4,7 +4,7 @@ import br.com.igbeni.uol.domain.FeedItem;
 
 public class FeedItemModel {
 
-    private final int id;
+    private final String id;
 
     private FeedItem.Type type;
 
@@ -18,11 +18,11 @@ public class FeedItemModel {
 
     private String webviewUrl;
 
-    public FeedItemModel(int id) {
+    public FeedItemModel(String id) {
         this.id = id;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

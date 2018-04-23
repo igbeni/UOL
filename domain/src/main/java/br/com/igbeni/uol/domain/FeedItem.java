@@ -2,7 +2,7 @@ package br.com.igbeni.uol.domain;
 
 public class FeedItem {
 
-    private final int id;
+    private final String id;
 
     private FeedItem.Type type;
 
@@ -16,11 +16,11 @@ public class FeedItem {
 
     private String webviewUrl;
 
-    public FeedItem(int id) {
+    public FeedItem(String id) {
         this.id = id;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -81,10 +81,6 @@ public class FeedItem {
             this.type = type;
         }
 
-        public String getType() {
-            return type;
-        }
-
         public static Type fromString(String text) {
             for (Type b : Type.values()) {
                 if (b.type.equalsIgnoreCase(text)) {
@@ -92,6 +88,10 @@ public class FeedItem {
                 }
             }
             return null;
+        }
+
+        public String getType() {
+            return type;
         }
     }
 }

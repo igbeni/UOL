@@ -1,4 +1,3 @@
-
 package br.com.igbeni.uol.mapper;
 
 import java.util.ArrayList;
@@ -60,5 +59,40 @@ public class FeedModelDataMapper implements DataMapper<FeedModel, Feed> {
         }
 
         return feedModelsCollection;
+    }
+
+    public FeedItemModel transform(FeedItem feedItem) {
+        if (feedItem == null) {
+            throw new IllegalArgumentException("Cannot transform a null value");
+        }
+
+        FeedItemModel feedItemModel = new FeedItemModel(feedItem.getId());
+        feedItemModel.setType(feedItem.getType());
+        feedItemModel.setTitle(feedItem.getTitle());
+        feedItemModel.setThumb(feedItem.getThumb());
+        feedItemModel.setUpdated(feedItem.getUpdated());
+        feedItemModel.setShareUrl(feedItem.getShareUrl());
+        feedItemModel.setWebviewUrl(feedItem.getWebviewUrl());
+        return feedItemModel;
+    }
+
+    public List<FeedItemModel> transform(List<FeedItem> feedItems) {
+        if (feedItems == null) {
+            throw new IllegalArgumentException("Cannot transform a null value");
+        }
+        final List<FeedItemModel> feedItemModels = new ArrayList<>();
+
+        for (FeedItem feedItem : feedItems) {
+            FeedItemModel feedItemModel = new FeedItemModel(feedItem.getId());
+            feedItemModel.setType(feedItem.getType());
+            feedItemModel.setTitle(feedItem.getTitle());
+            feedItemModel.setThumb(feedItem.getThumb());
+            feedItemModel.setUpdated(feedItem.getUpdated());
+            feedItemModel.setShareUrl(feedItem.getShareUrl());
+            feedItemModel.setWebviewUrl(feedItem.getWebviewUrl());
+            feedItemModels.add(feedItemModel);
+        }
+
+        return feedItemModels;
     }
 }

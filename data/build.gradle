@@ -35,6 +35,10 @@ dependencies {
     implementation dataDependencies.androidAnnotations
     implementation dataDependencies.igDiskCache
 
+    implementation dataDependencies.roomRuntime
+    annotationProcessor dataDependencies.roomCompiler
+    implementation dataDependencies.roomRxjava2
+
     testImplementation testDependencies.junit
     testImplementation testDependencies.assertj
     testImplementation testDependencies.mockito

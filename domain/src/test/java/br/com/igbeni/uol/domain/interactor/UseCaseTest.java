@@ -1,12 +1,10 @@
 package br.com.igbeni.uol.domain.interactor;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -17,23 +15,19 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.TestScheduler;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UseCaseTest {
 
-    private UseCaseTestClass useCase;
-
-    private TestDisposableObserver<Object> testDisposableObserver;
-
-    @Mock
-    private ThreadExecutor mockThreadExecutor;
-
-    @Mock
-    private PostExecutionThread mockPostExecutionThread;
-
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
+    private UseCaseTestClass useCase;
+    private TestDisposableObserver<Object> testDisposableObserver;
+    @Mock
+    private ThreadExecutor mockThreadExecutor;
+    @Mock
+    private PostExecutionThread mockPostExecutionThread;
 
     @Before
     public void setUp() {
@@ -83,21 +77,26 @@ public class UseCaseTest {
     private static class TestDisposableObserver<T> extends DisposableObserver<T> {
         private int valuesCount = 0;
 
-        @Override public void onNext(T value) {
+        @Override
+        public void onNext(T value) {
             valuesCount++;
         }
 
-        @Override public void onError(Throwable e) {
+        @Override
+        public void onError(Throwable e) {
             // no-op by default.
         }
 
-        @Override public void onComplete() {
+        @Override
+        public void onComplete() {
             // no-op by default.
         }
     }
 
     private static class Params {
         private static Params EMPTY = new Params();
-        private Params() {}
+
+        private Params() {
+        }
     }
 }

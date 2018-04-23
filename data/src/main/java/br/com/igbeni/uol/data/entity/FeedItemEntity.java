@@ -1,37 +1,57 @@
 package br.com.igbeni.uol.data.entity;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
-import br.com.igbeni.uol.domain.FeedItem;
+import java.util.UUID;
 
+@Entity(tableName = "feed_item")
 public class FeedItemEntity {
 
-    private final int id;
+    @NonNull
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    private String id;
 
+    @ColumnInfo(name = "type")
     @SerializedName("type")
     private String type;
 
+    @ColumnInfo(name = "title")
     @SerializedName("title")
     private String title;
 
+    @ColumnInfo(name = "thumb")
     @SerializedName("thumb")
     private String thumb;
 
+    @ColumnInfo(name = "updated")
     @SerializedName("updated")
     private Long updated;
 
+    @ColumnInfo(name = "shareUrl")
     @SerializedName("share-url")
     private String shareUrl;
 
+    @ColumnInfo(name = "webviewUrl")
     @SerializedName("webview-url")
     private String webviewUrl;
 
-    public FeedItemEntity(int id) {
-        this.id = id;
+    public FeedItemEntity() {
+        this.id = UUID.randomUUID().toString();
     }
 
-    public int getId() {
+    @NonNull
+    public String getId() {
         return id;
+    }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
     }
 
     public String getType() {

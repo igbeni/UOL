@@ -8,5 +8,6 @@ import dagger.Module;
 @Module
 public class FeedModule {
 
-  public FeedModule() {}
+    public FeedModule() {
+    }
 }
