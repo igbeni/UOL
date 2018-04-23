@@ -7,9 +7,10 @@ import javax.inject.Singleton;
 import br.com.igbeni.uol.AndroidApplication;
 import br.com.igbeni.uol.UIThread;
 import br.com.igbeni.uol.data.executor.JobExecutor;
+import br.com.igbeni.uol.data.repository.FeedDataRepository;
 import br.com.igbeni.uol.domain.executor.PostExecutionThread;
 import br.com.igbeni.uol.domain.executor.ThreadExecutor;
-import br.com.igbeni.uol.internal.di.scopes.PerApplication;
+import br.com.igbeni.uol.domain.repository.FeedRepository;
 import dagger.Module;
 import dagger.Provides;
 
@@ -18,22 +19,33 @@ import dagger.Provides;
  */
 @Module
 public class ApplicationModule {
+    private final AndroidApplication application;
 
-    @Provides
-    @PerApplication
-    Context provideApplicationContext(AndroidApplication application) {
-        return application.getApplicationContext();
+    public ApplicationModule(AndroidApplication application) {
+        this.application = application;
     }
 
     @Provides
-    @PerApplication
+    @Singleton
+    Context provideApplicationContext() {
+        return this.application;
+    }
+
+    @Provides
+    @Singleton
     ThreadExecutor provideThreadExecutor(JobExecutor jobExecutor) {
         return jobExecutor;
     }
 
     @Provides
-    @PerApplication
+    @Singleton
     PostExecutionThread providePostExecutionThread(UIThread uiThread) {
         return uiThread;
+    }
+
+    @Provides
+    @Singleton
+    FeedRepository provideFeedRepository(FeedDataRepository feedDataRepository) {
+        return feedDataRepository;
     }
 }

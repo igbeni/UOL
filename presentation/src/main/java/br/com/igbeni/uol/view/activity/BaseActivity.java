@@ -9,9 +9,9 @@ import javax.inject.Inject;
 
 import br.com.igbeni.uol.AndroidApplication;
 import br.com.igbeni.uol.internal.di.components.ApplicationComponent;
+import br.com.igbeni.uol.internal.di.modules.ActivityModule;
 import br.com.igbeni.uol.navigation.Navigator;
 import dagger.android.AndroidInjection;
-import dagger.android.support.AndroidSupportInjection;
 
 /**
  * Base {@link AppCompatActivity} class for every Activity in this application.
@@ -23,8 +23,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
+        this.getApplicationComponent().inject(this);
     }
 
     /**
@@ -38,4 +38,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         fragmentTransaction.add(containerViewId, fragment);
         fragmentTransaction.commit();
     }
+
+    /**
+     * Get the Main Application component for dependency injection.
+     *
+     * @return {@link ApplicationComponent}
+     */
+    protected ApplicationComponent getApplicationComponent() {
+        return ((AndroidApplication) getApplication()).getApplicationComponent();
+    }
+
+    /**
+     * Get an Activity module for dependency injection.
+     *
+     * @return {@link ActivityModule}
+     */
+    protected ActivityModule getActivityModule() {
+        return new ActivityModule(this);
+    }
 }
+

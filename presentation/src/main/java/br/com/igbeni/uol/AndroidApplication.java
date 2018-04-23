@@ -1,25 +1,19 @@
 package br.com.igbeni.uol;
 
-import android.app.Activity;
 import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
-import javax.inject.Inject;
-
+import br.com.igbeni.uol.internal.di.components.ApplicationComponent;
 import br.com.igbeni.uol.internal.di.components.DaggerApplicationComponent;
 import br.com.igbeni.uol.internal.di.modules.ApplicationModule;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
 
 /**
  * Android Main Application
  */
-public class AndroidApplication extends Application implements HasActivityInjector {
+public class AndroidApplication extends Application {
 
-    @Inject
-    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
+    private ApplicationComponent applicationComponent;
 
     @Override
     public void onCreate() {
@@ -33,14 +27,14 @@ public class AndroidApplication extends Application implements HasActivityInject
     }
 
     private void initializeInjector() {
-        DaggerApplicationComponent.builder()
-                .application(this)
-                .build()
-                .inject(this);
+        this.applicationComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
     }
 
-    @Override
-    public AndroidInjector<Activity> activityInjector() {
-        return dispatchingAndroidInjector;
+
+    public ApplicationComponent getApplicationComponent() {
+        return this.applicationComponent;
     }
+
 }

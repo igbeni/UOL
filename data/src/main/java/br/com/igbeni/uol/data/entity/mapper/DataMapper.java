@@ -5,6 +5,4 @@ import java.util.List;
 
 public interface DataMapper<D, S> {
     D transform(S s);
-
-    List<D> transform(Collection<S> sCollection);
 }
