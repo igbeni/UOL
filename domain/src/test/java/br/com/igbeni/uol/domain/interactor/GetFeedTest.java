@@ -34,10 +34,10 @@ public class GetFeedTest {
     }
 
     @Test
-    public void testGetUserListUseCaseObservableHappyCase() {
+    public void testGetFeedItemListUseCaseObservableHappyCase() {
         getFeed.buildUseCaseObservable(null);
 
-        verify(mockFeedRepository).feed();
+        verify(mockFeedRepository).feedItems();
         verifyNoMoreInteractions(mockFeedRepository);
         verifyZeroInteractions(mockThreadExecutor);
         verifyZeroInteractions(mockPostExecutionThread);

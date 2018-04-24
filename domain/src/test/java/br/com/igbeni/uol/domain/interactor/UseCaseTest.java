@@ -10,9 +10,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import br.com.igbeni.uol.domain.executor.PostExecutionThread;
 import br.com.igbeni.uol.domain.executor.ThreadExecutor;
-import io.reactivex.Observable;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.Flowable;
 import io.reactivex.schedulers.TestScheduler;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -57,24 +57,24 @@ public class UseCaseTest {
         useCase.execute(null, Params.EMPTY);
     }
 
-    private static class UseCaseTestClass extends UseCase<Object, Params> {
+    private static class UseCaseTestClass extends FlowableUseCase<Object, Params> {
 
         UseCaseTestClass(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
             super(threadExecutor, postExecutionThread);
         }
 
         @Override
-        Observable<Object> buildUseCaseObservable(Params params) {
-            return Observable.empty();
+        Flowable<Object> buildUseCaseObservable(Params params) {
+            return Flowable.empty();
         }
 
         @Override
-        public void execute(DisposableObserver<Object> observer, Params params) {
+        public void execute(DisposableSubscriber<Object> observer, Params params) {
             super.execute(observer, params);
         }
     }
 
-    private static class TestDisposableObserver<T> extends DisposableObserver<T> {
+    private static class TestDisposableObserver<T> extends DisposableSubscriber<T> {
         private int valuesCount = 0;
 
         @Override
