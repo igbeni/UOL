@@ -1,12 +1,8 @@
 package br.com.igbeni.uol.model;
 
-import br.com.igbeni.uol.domain.FeedItem;
-
-public class FeedItemModel {
+public class FeedItemModel extends ItemModel {
 
     private final String id;
-
-    private FeedItem.Type type;
 
     private String title;
 
@@ -24,14 +20,6 @@ public class FeedItemModel {
 
     public String getId() {
         return id;
-    }
-
-    public FeedItem.Type getType() {
-        return type;
-    }
-
-    public void setType(FeedItem.Type type) {
-        this.type = type;
     }
 
     public String getTitle() {

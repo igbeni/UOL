@@ -33,7 +33,6 @@ dependencies {
     implementation dataDependencies.rxJava
     implementation dataDependencies.rxAndroid
     implementation dataDependencies.androidAnnotations
-    implementation dataDependencies.igDiskCache
 
     implementation dataDependencies.roomRuntime
     annotationProcessor dataDependencies.roomCompiler

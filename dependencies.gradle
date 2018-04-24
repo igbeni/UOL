@@ -20,7 +20,6 @@ ext {
     arrowVersion = '1.0.0'
     roomVersion = '1.0.0'
     frescoVersion = '1.9.0'
-    igDiskCacheVersion = '1.0.0'
 
     //Testing
     robolectricVersion = '3.8'
@@ -78,7 +77,6 @@ ext {
             javaxAnnotation   : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
             javaxInject       : "javax.inject:javax.inject:${javaxInjectVersion}",
             androidAnnotations: "com.android.support:support-annotations:${androidAnnotationsVersion}",
-            igDiskCache       : "com.instagram.igdiskcache:ig-disk-cache:${igDiskCacheVersion}",
             roomRuntime       : "android.arch.persistence.room:runtime:${roomVersion}",
             roomCompiler      : "android.arch.persistence.room:compiler:${roomVersion}",
             roomRxjava2       : "android.arch.persistence.room:rxjava2:${roomVersion}",

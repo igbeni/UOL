@@ -19,39 +19,88 @@ import java.util.List;
 import javax.inject.Inject;
 
 import br.com.igbeni.uol.R;
+import br.com.igbeni.uol.domain.Type;
+import br.com.igbeni.uol.model.BannerItemModel;
 import br.com.igbeni.uol.model.FeedItemModel;
 import br.com.igbeni.uol.model.FeedModel;
+import br.com.igbeni.uol.model.ItemModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FeedItemAdapter extends RecyclerView.Adapter<FeedItemAdapter.FeedItemViewHolder> {
+public class FeedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final int TYPE_FEED_ITEM = 1;
+    private static final int TYPE_BANNER = 2;
 
     private final LayoutInflater layoutInflater;
-    private List<FeedItemModel> feedItemModelCollection;
+    private List<? extends ItemModel> itemModelCollection;
     private OnItemClickListener onItemClickListener;
 
     @Inject
     FeedItemAdapter(Context context) {
         this.layoutInflater =
                 (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.feedItemModelCollection = Collections.emptyList();
+        this.itemModelCollection = Collections.emptyList();
     }
 
     @Override
     public int getItemCount() {
-        return (this.feedItemModelCollection != null) ? this.feedItemModelCollection.size() : 0;
+        return (this.itemModelCollection != null) ? this.itemModelCollection.size() : 0;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        ItemModel itemModel = itemModelCollection.get(position);
+        if (itemModel.getType() == Type.NEWS) {
+            return TYPE_FEED_ITEM;
+        } else if (itemModel.getType() == Type.BANNER) {
+            return TYPE_BANNER;
+        } else {
+            return -1;
+        }
     }
 
     @NonNull
     @Override
-    public FeedItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final View view = this.layoutInflater.inflate(R.layout.row_feed_item, parent, false);
-        return new FeedItemViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == TYPE_FEED_ITEM) {
+            final View view = this.layoutInflater.inflate(R.layout.row_feed_item, parent, false);
+            return new FeedItemViewHolder(view);
+        } else if (viewType == TYPE_BANNER) {
+            final View view = this.layoutInflater.inflate(R.layout.row_banner_item, parent, false);
+            return new BannerItemViewHolder(view);
+        } else {
+            throw new RuntimeException("The type has to be FEED_ITEM or BANNER");
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FeedItemViewHolder holder, final int position) {
-        final FeedItemModel feedItemModel = this.feedItemModelCollection.get(position);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        switch (holder.getItemViewType()) {
+            case TYPE_FEED_ITEM:
+                initLayoutFeedItem((FeedItemViewHolder) holder, position);
+                break;
+            case TYPE_BANNER:
+                initLayoutBanner((BannerItemViewHolder) holder, position);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void initLayoutBanner(BannerItemViewHolder holder, int position) {
+        final BannerItemModel bannerItemModel = (BannerItemModel) this.itemModelCollection.get(position);
+
+        Uri uri = Uri.parse(bannerItemModel.getThumb());
+        if (uri != null) {
+            holder.draweeViewThumb.setImageURI(uri);
+            holder.draweeViewThumb.setVisibility(View.VISIBLE);
+        } else {
+            holder.draweeViewThumb.setVisibility(View.GONE);
+        }
+    }
+
+    private void initLayoutFeedItem(FeedItemViewHolder holder, int position) {
+        final FeedItemModel feedItemModel = (FeedItemModel) this.itemModelCollection.get(position);
         holder.textViewTitle.setText(feedItemModel.getTitle());
 
         Date date = new Date(feedItemModel.getUpdated());
@@ -88,7 +137,7 @@ public class FeedItemAdapter extends RecyclerView.Adapter<FeedItemAdapter.FeedIt
     public void setFeedModel(FeedModel feedModel) {
         List<FeedItemModel> feedItemModels = feedModel.getFeedItemModels();
         this.validateFeedItemModelCollection(feedItemModels);
-        this.feedItemModelCollection = feedItemModels;
+        this.itemModelCollection = feedItemModels;
         this.notifyDataSetChanged();
     }
 
@@ -98,8 +147,8 @@ public class FeedItemAdapter extends RecyclerView.Adapter<FeedItemAdapter.FeedIt
         }
     }
 
-    public void setFeedItems(List<FeedItemModel> feedItemModels) {
-        this.feedItemModelCollection = feedItemModels;
+    public void setItems(List<ItemModel> itemModels) {
+        this.itemModelCollection = itemModels;
         this.notifyDataSetChanged();
     }
 
@@ -118,6 +167,16 @@ public class FeedItemAdapter extends RecyclerView.Adapter<FeedItemAdapter.FeedIt
         SimpleDraweeView draweeViewThumb;
 
         FeedItemViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    static class BannerItemViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.thumb)
+        SimpleDraweeView draweeViewThumb;
+
+        BannerItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

@@ -10,6 +10,7 @@ import br.com.igbeni.uol.data.entity.FeedEntity;
 import br.com.igbeni.uol.data.entity.FeedItemEntity;
 import br.com.igbeni.uol.domain.Feed;
 import br.com.igbeni.uol.domain.FeedItem;
+import br.com.igbeni.uol.domain.Type;
 
 @Singleton
 public class FeedEntityDataMapper implements DataMapper<Feed, FeedEntity> {
@@ -29,7 +30,7 @@ public class FeedEntityDataMapper implements DataMapper<Feed, FeedEntity> {
 
             for (FeedItemEntity entity : feedEntity.getFeedItemEntities()) {
                 FeedItem feedItem = new FeedItem(entity.getId());
-                feedItem.setType(FeedItem.Type.fromString(entity.getType()));
+                feedItem.setType(Type.fromString(entity.getType()));
                 feedItem.setTitle(entity.getTitle());
                 feedItem.setThumb(entity.getThumb());
                 feedItem.setUpdated(entity.getUpdated());
@@ -49,7 +50,7 @@ public class FeedEntityDataMapper implements DataMapper<Feed, FeedEntity> {
 
         if (feedItemEntity != null) {
             feedItem = new FeedItem(feedItemEntity.getId());
-            feedItem.setType(FeedItem.Type.fromString(feedItemEntity.getType()));
+            feedItem.setType(Type.fromString(feedItemEntity.getType()));
             feedItem.setTitle(feedItemEntity.getTitle());
             feedItem.setThumb(feedItemEntity.getThumb());
             feedItem.setUpdated(feedItemEntity.getUpdated());
@@ -68,7 +69,7 @@ public class FeedEntityDataMapper implements DataMapper<Feed, FeedEntity> {
 
             for (FeedItemEntity entity : feedItemEntities) {
                 FeedItem feedItem = new FeedItem(entity.getId());
-                feedItem.setType(FeedItem.Type.fromString(entity.getType()));
+                feedItem.setType(Type.fromString(entity.getType()));
                 feedItem.setTitle(entity.getTitle());
                 feedItem.setThumb(entity.getThumb());
                 feedItem.setUpdated(entity.getUpdated());

@@ -1,5 +1,6 @@
 package br.com.igbeni.uol.presenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,6 +15,7 @@ import br.com.igbeni.uol.internal.di.PerActivity;
 import br.com.igbeni.uol.mapper.FeedModelDataMapper;
 import br.com.igbeni.uol.model.FeedItemModel;
 import br.com.igbeni.uol.model.FeedModel;
+import br.com.igbeni.uol.model.ItemModel;
 import br.com.igbeni.uol.view.FeedView;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.subscribers.DisposableSubscriber;
@@ -98,7 +100,10 @@ public class FeedPresenter implements Presenter {
 
     private void showFeedItemsInView(List<FeedItem> feedItems) {
         final List<FeedItemModel> feedItemModels = this.feedModelDataMapper.transform(feedItems);
-        this.viewFeedView.renderFeedItems(feedItemModels);
+
+        List<ItemModel> itemModels = new ArrayList<>(feedItemModels);
+
+        this.viewFeedView.renderItems(itemModels);
     }
 
     private void getFeedList() {

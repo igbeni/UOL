@@ -4,7 +4,7 @@ public class FeedItem {
 
     private final String id;
 
-    private FeedItem.Type type;
+    private Type type;
 
     private String title;
 
@@ -70,28 +70,5 @@ public class FeedItem {
 
     public void setWebviewUrl(String webviewUrl) {
         this.webviewUrl = webviewUrl;
-    }
-
-    public enum Type {
-        NEWS("news");
-
-        private String type;
-
-        Type(String type) {
-            this.type = type;
-        }
-
-        public static Type fromString(String text) {
-            for (Type b : Type.values()) {
-                if (b.type.equalsIgnoreCase(text)) {
-                    return b;
-                }
-            }
-            return null;
-        }
-
-        public String getType() {
-            return type;
-        }
     }
 }
