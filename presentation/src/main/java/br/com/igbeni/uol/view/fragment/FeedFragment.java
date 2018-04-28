@@ -30,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Fragment that shows a list of Users.
+ * Fragment that shows a list of FeedItems.
  */
 public class FeedFragment extends BaseFragment implements FeedView {
 
@@ -41,7 +41,7 @@ public class FeedFragment extends BaseFragment implements FeedView {
     FeedItemAdapter feedItemAdapter;
 
     @BindView(R.id.rv_feed)
-    RecyclerView rv_users;
+    RecyclerView rv_feed;
 
     @BindView(R.id.rl_progress)
     RelativeLayout rl_progress;
@@ -189,16 +189,16 @@ public class FeedFragment extends BaseFragment implements FeedView {
     private void setupRecyclerView() {
         this.feedItemAdapter.setOnItemClickListener(onItemClickListener);
         FeedLayoutManager layoutManager = new FeedLayoutManager(context());
-        this.rv_users.setLayoutManager(layoutManager);
+        this.rv_feed.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context(), layoutManager.getOrientation());
-        this.rv_users.addItemDecoration(dividerItemDecoration);
-        this.rv_users.setAdapter(feedItemAdapter);
+        this.rv_feed.addItemDecoration(dividerItemDecoration);
+        this.rv_feed.setAdapter(feedItemAdapter);
     }
 
     /**
-     * Loads all users.
+     * Loads all feedItems.
      */
-    private void loadUserList() {
+    private void loadFeedItemList() {
         this.feedPresenter.initialize();
     }
 
