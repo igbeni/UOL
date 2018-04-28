@@ -24,12 +24,12 @@ public class FeedEntityDataMapperTest {
     private FeedEntityDataMapper feedEntityDataMapper;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         feedEntityDataMapper = new FeedEntityDataMapper();
     }
 
     @Test
-    public void testTransformUserEntity() {
+    public void testTransformFeedEntity() {
         FeedEntity feedEntity = createFakeFeedEntity();
         Feed feed = feedEntityDataMapper.transform(feedEntity);
 

@@ -11,7 +11,7 @@ import br.com.igbeni.uol.internal.di.components.FeedComponent;
 import br.com.igbeni.uol.view.fragment.FeedItemFragment;
 
 /**
- * Activity that shows a list of Users.
+ * Activity that shows a list of FeedItem.
  */
 public class FeedItemActivity extends BaseActivity implements HasComponent<FeedComponent> {
 
@@ -21,9 +21,9 @@ public class FeedItemActivity extends BaseActivity implements HasComponent<FeedC
     private String itemId;
     private FeedComponent feedComponent;
 
-    public static Intent getCallingIntent(Context context, String userId) {
+    public static Intent getCallingIntent(Context context, String feedItemId) {
         Intent callingIntent = new Intent(context, FeedItemActivity.class);
-        callingIntent.putExtra(INTENT_EXTRA_PARAM_FEED_ITEM_ID, userId);
+        callingIntent.putExtra(INTENT_EXTRA_PARAM_FEED_ITEM_ID, feedItemId);
         return callingIntent;
     }
 

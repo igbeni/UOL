@@ -10,7 +10,7 @@ import br.com.igbeni.uol.model.FeedItemModel;
 import br.com.igbeni.uol.view.fragment.FeedFragment;
 
 /**
- * Activity that shows a list of Users.
+ * Activity that shows a list of FeddItem.
  */
 public class FeedActivity extends BaseActivity implements HasComponent<FeedComponent>,
         FeedFragment.FeedItemListener {

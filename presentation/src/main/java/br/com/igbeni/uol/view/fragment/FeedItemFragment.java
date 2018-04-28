@@ -26,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Fragment that shows a list of Users.
+ * Fragment that shows a list of FeedItem.
  */
 public class FeedItemFragment extends BaseFragment implements FeedItemView {
 

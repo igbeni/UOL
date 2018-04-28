@@ -92,7 +92,7 @@ public class FeedFragment extends BaseFragment implements FeedView {
         super.onViewCreated(view, savedInstanceState);
         this.feedPresenter.setView(this);
         if (savedInstanceState == null) {
-            this.loadUserList();
+            this.loadFeedItemList();
         }
     }
 

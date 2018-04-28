@@ -29,7 +29,7 @@ public class CloudFeedDataStoreTest {
     }
 
     @Test
-    public void testGetUserEntityListFromApi() {
+    public void testGetFeedItemEntityListFromApi() {
         cloudFeedDataStore.feedItemEntities();
         verify(mockRestApi).feedItemEntities();
     }

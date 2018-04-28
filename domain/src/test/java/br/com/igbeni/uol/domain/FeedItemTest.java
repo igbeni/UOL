@@ -19,7 +19,7 @@ public class FeedItemTest {
     }
 
     @Test
-    public void testUserConstructorHappyCase() {
+    public void testFeedItemConstructorHappyCase() {
         final String feedItemId = feedItem.getId();
 
         assertThat(feedItemId).isEqualTo(FAKE_FEED_ITEM_ID);

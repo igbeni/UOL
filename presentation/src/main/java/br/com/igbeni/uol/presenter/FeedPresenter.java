@@ -52,16 +52,16 @@ public class FeedPresenter implements Presenter {
     }
 
     /**
-     * Initializes the presenter by start retrieving the user list.
+     * Initializes the presenter by start retrieving the feed item list.
      */
     public void initialize() {
-        this.loadUserList();
+        this.loadFeedItemList();
     }
 
     /**
-     * Loads all users.
+     * Loads all feedItems.
      */
-    private void loadUserList() {
+    private void loadFeedItemList() {
         this.hideViewRetry();
         this.showViewLoading();
         this.getFeedList();
