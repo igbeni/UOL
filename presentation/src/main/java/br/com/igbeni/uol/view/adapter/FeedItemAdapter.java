@@ -13,7 +13,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,6 +23,7 @@ import br.com.igbeni.uol.model.BannerItemModel;
 import br.com.igbeni.uol.model.FeedItemModel;
 import br.com.igbeni.uol.model.FeedModel;
 import br.com.igbeni.uol.model.ItemModel;
+import br.com.igbeni.uol.utils.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -102,9 +102,7 @@ public class FeedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private void initLayoutFeedItem(FeedItemViewHolder holder, int position) {
         final FeedItemModel feedItemModel = (FeedItemModel) this.itemModelCollection.get(position);
         holder.textViewTitle.setText(feedItemModel.getTitle());
-
-        Date date = new Date(feedItemModel.getUpdated());
-        holder.textViewUpdated.setText(date.toString());
+        holder.textViewUpdated.setText(Utils.formatDate(feedItemModel.getUpdated()));
 
         if (feedItemModel.getThumb() != null) {
             Uri uri = Uri.parse(feedItemModel.getThumb());

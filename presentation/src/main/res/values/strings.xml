@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">UOL</string>
 
+    <string name="action_share">Share</string>
     <string name="btn_text_retry">Retry</string>
 
     //Exception messages

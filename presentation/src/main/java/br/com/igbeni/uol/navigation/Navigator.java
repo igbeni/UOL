@@ -6,7 +6,7 @@ import android.content.Intent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import br.com.igbeni.uol.view.activity.FeedItemActivity;
+import br.com.igbeni.uol.view.activity.FeedItemDetailsActivity;
 
 /**
  * Class used to navigate through the application.
@@ -21,7 +21,7 @@ public class Navigator {
 
     public void navigateToFeedItem(Context context, String itemId) {
         if (context != null) {
-            Intent intentToLaunch = FeedItemActivity.getCallingIntent(context, itemId);
+            Intent intentToLaunch = FeedItemDetailsActivity.getCallingIntent(context, itemId);
             context.startActivity(intentToLaunch);
         }
     }

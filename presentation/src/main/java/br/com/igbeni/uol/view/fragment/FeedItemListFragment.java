@@ -3,6 +3,7 @@ package br.com.igbeni.uol.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,7 +33,7 @@ import butterknife.ButterKnife;
 /**
  * Fragment that shows a list of FeedItems.
  */
-public class FeedFragment extends BaseFragment implements FeedView {
+public class FeedItemListFragment extends BaseFragment implements FeedView {
 
     @Inject
     FeedPresenter feedPresenter;
@@ -55,12 +56,12 @@ public class FeedFragment extends BaseFragment implements FeedView {
     private FeedItemListener feedItemListener;
     private FeedItemAdapter.OnItemClickListener onItemClickListener =
             feedItemModel -> {
-                if (FeedFragment.this.feedItemListener != null && feedItemModel != null) {
-                    FeedFragment.this.feedPresenter.onUserClicked(feedItemModel);
+                if (FeedItemListFragment.this.feedItemListener != null && feedItemModel != null) {
+                    FeedItemListFragment.this.feedPresenter.onUserClicked(feedItemModel);
                 }
             };
 
-    public FeedFragment() {
+    public FeedItemListFragment() {
         setRetainInstance(true);
     }
 
@@ -88,8 +89,8 @@ public class FeedFragment extends BaseFragment implements FeedView {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         this.feedPresenter.setView(this);
         if (savedInstanceState == null) {
             this.loadFeedItemList();

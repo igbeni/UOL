@@ -3,17 +3,21 @@ package br.com.igbeni.uol.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import br.com.igbeni.uol.R;
 import br.com.igbeni.uol.internal.di.HasComponent;
 import br.com.igbeni.uol.internal.di.components.DaggerFeedComponent;
 import br.com.igbeni.uol.internal.di.components.FeedComponent;
-import br.com.igbeni.uol.view.fragment.FeedItemFragment;
+import br.com.igbeni.uol.view.fragment.FeedItemDetailFragment;
 
 /**
  * Activity that shows a list of FeedItem.
  */
-public class FeedItemActivity extends BaseActivity implements HasComponent<FeedComponent> {
+public class FeedItemDetailsActivity extends BaseActivity implements HasComponent<FeedComponent> {
 
     private static final String INTENT_EXTRA_PARAM_FEED_ITEM_ID = "INTENT_EXTRA_PARAM_FEED_ITEM_ID";
     private static final String INSTANCE_STATE_PARAM_FEED_ITEM_ID = "INSTANCE_STATE_PARAM_FEED_ITEM_ID";
@@ -22,7 +26,7 @@ public class FeedItemActivity extends BaseActivity implements HasComponent<FeedC
     private FeedComponent feedComponent;
 
     public static Intent getCallingIntent(Context context, String feedItemId) {
-        Intent callingIntent = new Intent(context, FeedItemActivity.class);
+        Intent callingIntent = new Intent(context, FeedItemDetailsActivity.class);
         callingIntent.putExtra(INTENT_EXTRA_PARAM_FEED_ITEM_ID, feedItemId);
         return callingIntent;
     }
@@ -30,7 +34,15 @@ public class FeedItemActivity extends BaseActivity implements HasComponent<FeedC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_layout);
+        setContentView(R.layout.activity_feed_item_detail);
+
+        Toolbar toolbar = findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         this.initializeActivity(savedInstanceState);
         this.initializeInjector();
@@ -47,7 +59,10 @@ public class FeedItemActivity extends BaseActivity implements HasComponent<FeedC
     private void initializeActivity(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             this.itemId = getIntent().getStringExtra(INTENT_EXTRA_PARAM_FEED_ITEM_ID);
-            addFragment(R.id.fragmentContainer, FeedItemFragment.forItem(itemId));
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.feeditem_detail_container, FeedItemDetailFragment.forItem(itemId))
+                    .commit();
         } else {
             this.itemId = savedInstanceState.getString(INSTANCE_STATE_PARAM_FEED_ITEM_ID);
         }
@@ -63,5 +78,15 @@ public class FeedItemActivity extends BaseActivity implements HasComponent<FeedC
     @Override
     public FeedComponent getComponent() {
         return feedComponent;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            NavUtils.navigateUpTo(this, new Intent(this, FeedItemListActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

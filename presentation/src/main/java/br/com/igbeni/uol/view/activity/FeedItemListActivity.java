@@ -7,13 +7,13 @@ import br.com.igbeni.uol.internal.di.HasComponent;
 import br.com.igbeni.uol.internal.di.components.DaggerFeedComponent;
 import br.com.igbeni.uol.internal.di.components.FeedComponent;
 import br.com.igbeni.uol.model.FeedItemModel;
-import br.com.igbeni.uol.view.fragment.FeedFragment;
+import br.com.igbeni.uol.view.fragment.FeedItemListFragment;
 
 /**
  * Activity that shows a list of FeddItem.
  */
-public class FeedActivity extends BaseActivity implements HasComponent<FeedComponent>,
-        FeedFragment.FeedItemListener {
+public class FeedItemListActivity extends BaseActivity implements HasComponent<FeedComponent>,
+        FeedItemListFragment.FeedItemListener {
 
     private FeedComponent feedComponent;
 
@@ -25,7 +25,7 @@ public class FeedActivity extends BaseActivity implements HasComponent<FeedCompo
         this.initializeInjector();
 
         if (savedInstanceState == null) {
-            addFragment(R.id.fragmentContainer, new FeedFragment());
+            addFragment(R.id.fragmentContainer, new FeedItemListFragment());
         }
     }
 
