@@ -1,19 +1,16 @@
 package br.com.igbeni.uol.view.fragment;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
@@ -43,24 +40,12 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
     @BindView(R.id.rl_progress)
     RelativeLayout rl_progress;
 
-    /*
-    @BindView(R.id.rl_retry)
-    RelativeLayout rl_retry;
-
-    @BindView(R.id.title)
-    TextView textViewTitle;
-
-    @BindView(R.id.updated)
-    TextView textViewUpdated;
-
-    @BindView(R.id.thumb)
-    SimpleDraweeView draweeViewThumb;
-    */
-
     @BindView(R.id.webview)
     WebView webView;
 
     private FeedItemModel feedItemModel;
+
+    private boolean isLoading;
 
     public FeedItemDetailFragment() {
         setRetainInstance(true);
@@ -87,19 +72,23 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
         final View fragmentView = inflater.inflate(R.layout.fragment_feed_item_detail, container, false);
         ButterKnife.bind(this, fragmentView);
 
-        webView.setWebViewClient(new WebViewClient() {
+        WebViewClient webViewClient = new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                FeedItemDetailFragment.this.rl_progress.setVisibility(View.VISIBLE);
+                showLoading();
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                FeedItemDetailFragment.this.rl_progress.setVisibility(View.GONE);
+                hideLoading();
             }
-        });
+        };
+
+        WebSettings webViewSettings = this.webView.getSettings();
+        webViewSettings.setJavaScriptEnabled(true);
+        this.webView.setWebViewClient(webViewClient);
         return fragmentView;
     }
 
@@ -149,47 +138,34 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
 
     @Override
     public void renderFeedItem(FeedItemModel feedItemModel) {
-//        /*
         if (feedItemModel != null) {
             this.feedItemModel = feedItemModel;
-            /*
-            this.textViewTitle.setText(feedItemModel.getTitle());
-            this.textViewUpdated.setText(Utils.formatDate(feedItemModel.getUpdated()));
-
-            if (feedItemModel.getThumb() != null) {
-                Uri uri = Uri.parse(feedItemModel.getThumb());
-                if (uri != null) {
-                    this.draweeViewThumb.setImageURI(uri);
-                    this.draweeViewThumb.setVisibility(View.VISIBLE);
-                } else {
-                    this.draweeViewThumb.setVisibility(View.GONE);
-                }
-            } else {
-                this.draweeViewThumb.setVisibility(View.GONE);
-            }
-            */
             this.webView.loadUrl(feedItemModel.getWebviewUrl());
         }
     }
 
     @Override
     public void showLoading() {
+        isLoading = true;
+        getActivity().invalidateOptionsMenu();
         this.rl_progress.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
+        isLoading = false;
+        getActivity().invalidateOptionsMenu();
         this.rl_progress.setVisibility(View.GONE);
     }
 
     @Override
     public void showRetry() {
-//        this.rl_retry.setVisibility(View.VISIBLE);
+
     }
 
     @Override
     public void hideRetry() {
-//        this.rl_retry.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -205,22 +181,27 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_feed_item_detail, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_share);
-        if (feedItemModel != null) {
-            ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-            if (mShareActionProvider != null) {
-                mShareActionProvider.setShareIntent(createShareFeedItemIntent(feedItemModel));
-            } else {
-                Log.d(FeedItemDetailFragment.class.getSimpleName(), "Share Action Provider is null?");
+
+        if (isLoading) {
+            for (int i = 0; i < menu.size(); i++) {
+                menu.getItem(i).setVisible(false);
             }
         }
     }
 
-    private Intent createShareFeedItemIntent(FeedItemModel feedItemModel) {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, feedItemModel.getShareUrl());
-        return shareIntent;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, feedItemModel.getShareUrl());
+                startActivity(Intent.createChooser(shareIntent, "Shearing Option"));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
