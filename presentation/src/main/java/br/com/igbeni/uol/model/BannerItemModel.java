@@ -1,5 +1,7 @@
 package br.com.igbeni.uol.model;
 
+import br.com.igbeni.uol.domain.Type;
+
 public class BannerItemModel extends ItemModel {
 
     private final String thumb;
@@ -12,4 +14,8 @@ public class BannerItemModel extends ItemModel {
         return thumb;
     }
 
+    @Override
+    public Type getType() {
+        return Type.BANNER;
+    }
 }

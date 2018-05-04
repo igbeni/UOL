@@ -36,8 +36,9 @@ public class FeedItemDetailsActivity extends BaseActivity implements HasComponen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_item_detail);
 
-        Toolbar toolbar = findViewById(R.id.detail_toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle(getString(R.string.app_name));
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

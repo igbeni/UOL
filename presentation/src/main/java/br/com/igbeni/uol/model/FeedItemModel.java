@@ -1,5 +1,7 @@
 package br.com.igbeni.uol.model;
 
+import br.com.igbeni.uol.domain.Type;
+
 public class FeedItemModel extends ItemModel {
 
     private final String id;
@@ -60,5 +62,10 @@ public class FeedItemModel extends ItemModel {
 
     public void setWebviewUrl(String webviewUrl) {
         this.webviewUrl = webviewUrl;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.NEWS;
     }
 }

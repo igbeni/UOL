@@ -15,7 +15,7 @@ public class GetFeed extends FlowableUseCase<List<FeedItem>, Void> {
     private final FeedRepository feedRepository;
 
     @Inject
-    GetFeed(FeedRepository feedRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+    public GetFeed(FeedRepository feedRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
         this.feedRepository = feedRepository;
     }

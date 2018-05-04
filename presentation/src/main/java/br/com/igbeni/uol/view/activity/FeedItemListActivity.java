@@ -1,6 +1,7 @@
 package br.com.igbeni.uol.view.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import br.com.igbeni.uol.R;
 import br.com.igbeni.uol.internal.di.HasComponent;
@@ -20,7 +21,11 @@ public class FeedItemListActivity extends BaseActivity implements HasComponent<F
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_layout);
+        setContentView(R.layout.activity_feed_item_list);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle(getString(R.string.app_name));
 
         this.initializeInjector();
 

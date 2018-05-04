@@ -2,7 +2,8 @@ package br.com.igbeni.uol.domain;
 
 public enum Type {
     NEWS("news"),
-    BANNER("banner");
+    BANNER("banner"),
+    DATE("date");
 
     private String type;
 

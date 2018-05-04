@@ -20,16 +20,17 @@ import javax.inject.Inject;
 import br.com.igbeni.uol.R;
 import br.com.igbeni.uol.domain.Type;
 import br.com.igbeni.uol.model.BannerItemModel;
+import br.com.igbeni.uol.model.DateItemModel;
 import br.com.igbeni.uol.model.FeedItemModel;
 import br.com.igbeni.uol.model.FeedModel;
 import br.com.igbeni.uol.model.ItemModel;
-import br.com.igbeni.uol.utils.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FeedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_FEED_ITEM = 1;
     private static final int TYPE_BANNER = 2;
+    private static final int TYPE_DATE = 3;
 
     private final LayoutInflater layoutInflater;
     private List<? extends ItemModel> itemModelCollection;
@@ -54,6 +55,8 @@ public class FeedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return TYPE_FEED_ITEM;
         } else if (itemModel.getType() == Type.BANNER) {
             return TYPE_BANNER;
+        } else if (itemModel.getType() == Type.DATE) {
+            return TYPE_DATE;
         } else {
             return -1;
         }
@@ -68,6 +71,9 @@ public class FeedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else if (viewType == TYPE_BANNER) {
             final View view = this.layoutInflater.inflate(R.layout.row_banner_item, parent, false);
             return new BannerItemViewHolder(view);
+        } else if (viewType == TYPE_DATE) {
+            final View view = this.layoutInflater.inflate(R.layout.row_date_item, parent, false);
+            return new DateItemViewHolder(view);
         } else {
             throw new RuntimeException("The type has to be FEED_ITEM or BANNER");
         }
@@ -82,9 +88,18 @@ public class FeedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case TYPE_BANNER:
                 initLayoutBanner((BannerItemViewHolder) holder, position);
                 break;
+            case TYPE_DATE:
+                initLayoutDate((DateItemViewHolder) holder, position);
+                break;
             default:
                 break;
         }
+    }
+
+    private void initLayoutDate(DateItemViewHolder holder, int position) {
+        final DateItemModel dateItemModel = (DateItemModel) this.itemModelCollection.get(position);
+
+        holder.textViewDate.setText(formatDate(dateItemModel.getDate()));
     }
 
     private void initLayoutBanner(BannerItemViewHolder holder, int position) {
@@ -102,7 +117,7 @@ public class FeedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private void initLayoutFeedItem(FeedItemViewHolder holder, int position) {
         final FeedItemModel feedItemModel = (FeedItemModel) this.itemModelCollection.get(position);
         holder.textViewTitle.setText(feedItemModel.getTitle());
-        holder.textViewUpdated.setText(Utils.formatDate(feedItemModel.getUpdated()));
+        holder.textViewUpdated.setText(formatDate(feedItemModel.getUpdated()));
 
         if (feedItemModel.getThumb() != null) {
             Uri uri = Uri.parse(feedItemModel.getThumb());
@@ -121,6 +136,23 @@ public class FeedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 FeedItemAdapter.this.onItemClickListener.onFeedItemClicked(feedItemModel);
             }
         });
+    }
+
+    private String formatDate(String timeAsString) {
+        String year = timeAsString.substring(0, 4);
+        String month = timeAsString.substring(4, 6);
+        String day = timeAsString.substring(6, 8);
+
+        return day + '/' + month + '/' + year;
+    }
+
+    private String formatDate(Long date) {
+        String timeAsString = Long.toString(date);
+
+        String hours = timeAsString.substring(8, 10);
+        String minutes = timeAsString.substring(10, 12);
+
+        return hours + 'h' + minutes;
     }
 
     @Override
@@ -175,6 +207,16 @@ public class FeedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         SimpleDraweeView draweeViewThumb;
 
         BannerItemViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    static class DateItemViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.date)
+        TextView textViewDate;
+
+        DateItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

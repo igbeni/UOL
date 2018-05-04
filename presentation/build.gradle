@@ -55,6 +55,7 @@ dependencies {
     annotationProcessor presentationDependencies.daggerProcessor
     implementation presentationDependencies.dagger
     implementation presentationDependencies.daggerSupport
+    implementation "joda-time:joda-time:2.3"
 
     implementation presentationDependencies.butterKnife
     annotationProcessor presentationDependencies.butterKnifeCompiler
