@@ -1,11 +1,32 @@
+/*
+ * (C) Copyright 2018.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  Contributors:
+ *      Iggor Alves
+ */
+
 package br.com.igbeni.uol.data.net;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.Nullable;
 
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Objects;
 
 import br.com.igbeni.uol.data.entity.FeedItemEntity;
 import br.com.igbeni.uol.data.entity.mapper.FeedEntityJsonMapper;
@@ -19,6 +40,7 @@ import io.reactivex.Flowable;
 public class RestApiImpl implements RestApi {
 
     private final Context context;
+    @Nullable
     private FeedEntityJsonMapper feedEntityJsonMapper;
 
     /**
@@ -27,7 +49,7 @@ public class RestApiImpl implements RestApi {
      * @param context              {@link Context}.
      * @param feedEntityJsonMapper
      */
-    public RestApiImpl(Context context, FeedEntityJsonMapper feedEntityJsonMapper) {
+    public RestApiImpl(@Nullable Context context, @Nullable FeedEntityJsonMapper feedEntityJsonMapper) {
         if (context == null || feedEntityJsonMapper == null) {
             throw new IllegalArgumentException("The constructor parameters cannot be null!!!");
         }
@@ -45,7 +67,7 @@ public class RestApiImpl implements RestApi {
 
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo networkInfo = Objects.requireNonNull(connectivityManager).getActiveNetworkInfo();
         isConnected = (networkInfo != null && networkInfo.isConnectedOrConnecting());
 
         return isConnected;
@@ -58,7 +80,7 @@ public class RestApiImpl implements RestApi {
                 try {
                     String responseFeedEntity = getFeedEntityFromApi();
                     if (responseFeedEntity != null) {
-                        emitter.onNext(feedEntityJsonMapper.transformToListFromEntity(responseFeedEntity));
+                        emitter.onNext(Objects.requireNonNull(feedEntityJsonMapper).transformToListFromEntity(responseFeedEntity));
                         emitter.onComplete();
                     } else {
                         emitter.onError(new NetworkConnectionException());
@@ -72,6 +94,7 @@ public class RestApiImpl implements RestApi {
         }, BackpressureStrategy.BUFFER);
     }
 
+    @Nullable
     private String getFeedEntityFromApi() throws MalformedURLException {
         return ApiConnection.createGET(API_BASE_URL).requestSyncCall();
     }

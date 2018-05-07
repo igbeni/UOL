@@ -1,4 +1,27 @@
+/*
+ * (C) Copyright 2018.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  Contributors:
+ *      Iggor Alves
+ */
+
 package br.com.igbeni.uol.presenter;
+
+import android.support.annotation.Nullable;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -19,6 +42,7 @@ public class FeedItemPresenter implements Presenter {
 
     private final GetFeedItem getFeedItemUseCase;
     private final FeedModelDataMapper feedModelDataMapper;
+    @Nullable
     private FeedItemView viewFeedItemView;
 
     @Inject
@@ -55,23 +79,23 @@ public class FeedItemPresenter implements Presenter {
     }
 
     private void showViewLoading() {
-        this.viewFeedItemView.showLoading();
+        Objects.requireNonNull(this.viewFeedItemView).showLoading();
     }
 
     private void hideViewLoading() {
-        this.viewFeedItemView.hideLoading();
+        Objects.requireNonNull(this.viewFeedItemView).hideLoading();
     }
 
     private void showViewRetry() {
-        this.viewFeedItemView.showRetry();
+        Objects.requireNonNull(this.viewFeedItemView).showRetry();
     }
 
     private void hideViewRetry() {
-        this.viewFeedItemView.hideRetry();
+        Objects.requireNonNull(this.viewFeedItemView).hideRetry();
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String errorMessage = ErrorMessageFactory.create(this.viewFeedItemView.context(),
+        String errorMessage = ErrorMessageFactory.create(Objects.requireNonNull(this.viewFeedItemView).context(),
                 errorBundle.getException());
         this.viewFeedItemView.showError(errorMessage);
     }
@@ -82,7 +106,7 @@ public class FeedItemPresenter implements Presenter {
 
     private void showFeedItemInView(FeedItem feedItem) {
         final FeedItemModel feedItemModel = this.feedModelDataMapper.transform(feedItem);
-        this.viewFeedItemView.renderFeedItem(feedItemModel);
+        Objects.requireNonNull(this.viewFeedItemView).renderFeedItem(feedItemModel);
     }
 
     private final class FeedItemObserver extends DisposableSubscriber<FeedItem> {

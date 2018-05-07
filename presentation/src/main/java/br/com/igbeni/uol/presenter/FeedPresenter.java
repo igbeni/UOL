@@ -1,9 +1,31 @@
+/*
+ * (C) Copyright 2018.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  Contributors:
+ *      Iggor Alves
+ */
+
 package br.com.igbeni.uol.presenter;
+
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -29,6 +51,7 @@ public class FeedPresenter implements Presenter {
 
     private final GetFeed getFeedUseCase;
     private final FeedModelDataMapper feedModelDataMapper;
+    @Nullable
     private FeedView viewFeedView;
 
     @Inject
@@ -72,34 +95,34 @@ public class FeedPresenter implements Presenter {
     }
 
     public void onUserClicked(FeedItemModel feedItemModel) {
-        this.viewFeedView.viewFeedItem(feedItemModel);
+        Objects.requireNonNull(this.viewFeedView).viewFeedItem(feedItemModel);
     }
 
     private void showViewLoading() {
-        this.viewFeedView.showLoading();
+        Objects.requireNonNull(this.viewFeedView).showLoading();
     }
 
     private void hideViewLoading() {
-        this.viewFeedView.hideLoading();
+        Objects.requireNonNull(this.viewFeedView).hideLoading();
     }
 
     private void showViewRetry() {
-        this.viewFeedView.showRetry();
+        Objects.requireNonNull(this.viewFeedView).showRetry();
     }
 
     private void hideViewRetry() {
-        this.viewFeedView.hideRetry();
+        Objects.requireNonNull(this.viewFeedView).hideRetry();
     }
 
     private void showErrorMessage(ErrorBundle errorBundle) {
-        String errorMessage = ErrorMessageFactory.create(this.viewFeedView.context(),
+        String errorMessage = ErrorMessageFactory.create(Objects.requireNonNull(this.viewFeedView).context(),
                 errorBundle.getException());
         this.viewFeedView.showError(errorMessage);
     }
 
     private void showFeedInView(Feed feed) {
         final FeedModel feedModel = this.feedModelDataMapper.transform(feed);
-        this.viewFeedView.renderFeed(feedModel);
+        Objects.requireNonNull(this.viewFeedView).renderFeed(feedModel);
     }
 
     private void showFeedItemsInView(List<FeedItem> feedItems) {
@@ -119,9 +142,10 @@ public class FeedPresenter implements Presenter {
             consolidatedList.addAll(groupedHashMap.get(date));
         }
 
-        this.viewFeedView.renderItems(consolidatedList);
+        Objects.requireNonNull(this.viewFeedView).renderItems(consolidatedList);
     }
 
+    @android.support.annotation.NonNull
     private Map<String, List<ItemModel>> groupFeedItemsIntoHashMap(List<ItemModel> itemModels) {
         Map<String, List<ItemModel>> groupedHashMap = new HashMap<>();
 

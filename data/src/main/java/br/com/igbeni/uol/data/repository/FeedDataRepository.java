@@ -1,8 +1,28 @@
+/*
+ * (C) Copyright 2018.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  Contributors:
+ *      Iggor Alves
+ */
+
 package br.com.igbeni.uol.data.repository;
 
 import org.reactivestreams.Publisher;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -40,7 +60,7 @@ public class FeedDataRepository implements FeedRepository {
             emitter.onSuccess(true);
         }).flatMapPublisher((Function<Boolean, Publisher<List<FeedItemEntity>>>) aBoolean -> feedDataStore.feedItemEntities())
                 .flatMap((Function<List<FeedItemEntity>, Flowable<List<FeedItemEntity>>>) feedItemEntities -> FeedDataRepository.this.saveFeedItems(feedItemEntities).toSingle(() -> feedItemEntities).toFlowable())
-                .flatMap((Function<List<FeedItemEntity>, Flowable<List<FeedItem>>>) feedItemEntities -> Flowable.just(feedEntityDataMapper.transform(feedItemEntities)));
+                .flatMap((Function<List<FeedItemEntity>, Flowable<List<FeedItem>>>) feedItemEntities -> Flowable.just(Objects.requireNonNull(feedEntityDataMapper.transform(feedItemEntities))));
     }
 
     @Override
@@ -49,7 +69,7 @@ public class FeedDataRepository implements FeedRepository {
         return feedDataStore.feedItemEntity(itemId).map(feedEntityDataMapper::transform);
     }
 
-    public Completable saveFeedItems(List<FeedItemEntity> feedItemEntities) {
+    private Completable saveFeedItems(List<FeedItemEntity> feedItemEntities) {
         return feedDataStoreFactory.createLocalDataStore().saveFeedItemEnities(feedItemEntities);
     }
 }

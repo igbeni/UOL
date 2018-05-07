@@ -1,4 +1,25 @@
+/*
+ * (C) Copyright 2018.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  Contributors:
+ *      Iggor Alves
+ */
+
 package br.com.igbeni.uol.data.entity.mapper;
+
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +40,9 @@ public class FeedEntityDataMapper implements DataMapper<Feed, FeedEntity> {
     public FeedEntityDataMapper() {
     }
 
+    @Nullable
     @Override
-    public Feed transform(FeedEntity feedEntity) {
+    public Feed transform(@Nullable FeedEntity feedEntity) {
         Feed feed = null;
 
         if (feedEntity != null) {
@@ -45,7 +67,8 @@ public class FeedEntityDataMapper implements DataMapper<Feed, FeedEntity> {
         return feed;
     }
 
-    public FeedItem transform(FeedItemEntity feedItemEntity) {
+    @Nullable
+    public FeedItem transform(@Nullable FeedItemEntity feedItemEntity) {
         FeedItem feedItem = null;
 
         if (feedItemEntity != null) {
@@ -61,7 +84,8 @@ public class FeedEntityDataMapper implements DataMapper<Feed, FeedEntity> {
         return feedItem;
     }
 
-    public List<FeedItem> transform(List<FeedItemEntity> feedItemEntities) {
+    @Nullable
+    public List<FeedItem> transform(@Nullable List<FeedItemEntity> feedItemEntities) {
         List<FeedItem> feedItems = null;
 
         if (feedItemEntities != null) {
@@ -83,7 +107,8 @@ public class FeedEntityDataMapper implements DataMapper<Feed, FeedEntity> {
         return feedItems;
     }
 
-    public List<FeedItemEntity> transformToListOfEntity(List<FeedItem> feedItems) {
+    @Nullable
+    public List<FeedItemEntity> transformToListOfEntity(@Nullable List<FeedItem> feedItems) {
         List<FeedItemEntity> feedItemEntities = null;
 
         if (feedItems != null) {

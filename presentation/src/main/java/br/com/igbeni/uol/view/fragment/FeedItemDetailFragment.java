@@ -1,9 +1,31 @@
+/*
+ * (C) Copyright 2018.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  Contributors:
+ *      Iggor Alves
+ */
+
 package br.com.igbeni.uol.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,9 +35,11 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.RelativeLayout;
+import android.widget.ProgressBar;
 
 import com.fernandocejas.arrow.checks.Preconditions;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -37,12 +61,15 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
     @Inject
     FeedItemPresenter feedItemPresenter;
 
-    @BindView(R.id.rl_progress)
-    RelativeLayout rl_progress;
+    @Nullable
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
+    @Nullable
     @BindView(R.id.webview)
     WebView webView;
 
+    @Nullable
     private FeedItemModel feedItemModel;
 
     private boolean isLoading;
@@ -51,6 +78,7 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
         setRetainInstance(true);
     }
 
+    @NonNull
     public static FeedItemDetailFragment forItem(String itemId) {
         final FeedItemDetailFragment feedItemDetailFragment = new FeedItemDetailFragment();
         final Bundle arguments = new Bundle();
@@ -66,8 +94,9 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
         setHasOptionsMenu(true);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_feed_item_detail, container, false);
         ButterKnife.bind(this, fragmentView);
@@ -86,14 +115,14 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
             }
         };
 
-        WebSettings webViewSettings = this.webView.getSettings();
+        WebSettings webViewSettings = Objects.requireNonNull(this.webView).getSettings();
         webViewSettings.setJavaScriptEnabled(true);
         this.webView.setWebViewClient(webViewClient);
         return fragmentView;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.feedItemPresenter.setView(this);
         if (savedInstanceState == null) {
@@ -107,9 +136,10 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
         }
     }
 
+    @Nullable
     private String currentItemId() {
         final Bundle arguments = getArguments();
-        Preconditions.checkNotNull(arguments, "Fragment arguments cannot be null");
+        Preconditions.checkNotNull(Objects.requireNonNull(arguments), "Fragment arguments cannot be null");
         return arguments.getString(PARAM_FEED_ITEM_ID);
     }
 
@@ -137,25 +167,25 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
     }
 
     @Override
-    public void renderFeedItem(FeedItemModel feedItemModel) {
+    public void renderFeedItem(@Nullable FeedItemModel feedItemModel) {
         if (feedItemModel != null) {
             this.feedItemModel = feedItemModel;
-            this.webView.loadUrl(feedItemModel.getWebviewUrl());
+            Objects.requireNonNull(this.webView).loadUrl(feedItemModel.getWebviewUrl());
         }
     }
 
     @Override
     public void showLoading() {
         isLoading = true;
-        getActivity().invalidateOptionsMenu();
-        this.rl_progress.setVisibility(View.VISIBLE);
+        Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
+        Objects.requireNonNull(this.progressBar).setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
         isLoading = false;
-        getActivity().invalidateOptionsMenu();
-        this.rl_progress.setVisibility(View.GONE);
+        Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
+        Objects.requireNonNull(this.progressBar).setVisibility(View.GONE);
     }
 
     @Override
@@ -175,11 +205,11 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
 
     @Override
     public Context context() {
-        return this.getActivity().getApplicationContext();
+        return Objects.requireNonNull(this.getActivity()).getApplicationContext();
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_feed_item_detail, menu);
 
         if (isLoading) {
@@ -190,13 +220,13 @@ public class FeedItemDetailFragment extends BaseFragment implements FeedItemView
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
                 shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, feedItemModel.getShareUrl());
+                shareIntent.putExtra(Intent.EXTRA_TEXT, Objects.requireNonNull(feedItemModel).getShareUrl());
                 startActivity(Intent.createChooser(shareIntent, "Shearing Option"));
                 return true;
 

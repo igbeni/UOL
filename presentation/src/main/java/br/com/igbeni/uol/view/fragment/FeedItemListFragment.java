@@ -1,18 +1,41 @@
+/*
+ * (C) Copyright 2018.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  Contributors:
+ *      Iggor Alves
+ */
+
 package br.com.igbeni.uol.view.fragment;
 
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -24,7 +47,7 @@ import br.com.igbeni.uol.model.ItemModel;
 import br.com.igbeni.uol.presenter.FeedPresenter;
 import br.com.igbeni.uol.view.FeedView;
 import br.com.igbeni.uol.view.adapter.FeedItemAdapter;
-import br.com.igbeni.uol.view.adapter.FeedLayoutManager;
+import br.com.igbeni.uol.view.adapter.FeedItemDecoration;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -39,20 +62,27 @@ public class FeedItemListFragment extends BaseFragment implements FeedView {
     @Inject
     FeedItemAdapter feedItemAdapter;
 
+    @Nullable
     @BindView(R.id.rv_feed)
     RecyclerView rv_feed;
 
-    @BindView(R.id.rl_progress)
-    RelativeLayout rl_progress;
+    @Nullable
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
+    @Nullable
     @BindView(R.id.rl_retry)
     RelativeLayout rl_retry;
 
+    @Nullable
     @BindView(R.id.bt_retry)
     Button bt_retry;
 
+    @Nullable
     private FeedItemListener feedItemListener;
-    private FeedItemAdapter.OnItemClickListener onItemClickListener =
+
+    @NonNull
+    private final FeedItemAdapter.OnItemClickListener onItemClickListener =
             feedItemModel -> {
                 if (FeedItemListFragment.this.feedItemListener != null && feedItemModel != null) {
                     FeedItemListFragment.this.feedPresenter.onUserClicked(feedItemModel);
@@ -78,9 +108,9 @@ public class FeedItemListFragment extends BaseFragment implements FeedView {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View fragmentView = inflater.inflate(R.layout.fragment_feed, container, false);
+        final View fragmentView = inflater.inflate(R.layout.fragment_feed_item_list, container, false);
         ButterKnife.bind(this, fragmentView);
         setupRecyclerView();
         return fragmentView;
@@ -126,33 +156,33 @@ public class FeedItemListFragment extends BaseFragment implements FeedView {
 
     @Override
     public void showLoading() {
-        this.rl_progress.setVisibility(View.VISIBLE);
+        Objects.requireNonNull(this.progressBar).setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-        this.rl_progress.setVisibility(View.GONE);
+        Objects.requireNonNull(this.progressBar).setVisibility(View.GONE);
     }
 
     @Override
     public void showRetry() {
-        this.rl_retry.setVisibility(View.VISIBLE);
+        Objects.requireNonNull(this.rl_retry).setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideRetry() {
-        this.rl_retry.setVisibility(View.GONE);
+        Objects.requireNonNull(this.rl_retry).setVisibility(View.GONE);
     }
 
     @Override
-    public void renderFeed(FeedModel feedModel) {
+    public void renderFeed(@Nullable FeedModel feedModel) {
         if (feedModel != null) {
             this.feedItemAdapter.setFeedModel(feedModel);
         }
     }
 
     @Override
-    public void renderItems(List<ItemModel> itemModels) {
+    public void renderItems(@Nullable List<ItemModel> itemModels) {
         if (itemModels != null) {
             this.feedItemAdapter.setItems(itemModels);
         }
@@ -172,15 +202,22 @@ public class FeedItemListFragment extends BaseFragment implements FeedView {
 
     @Override
     public Context context() {
-        return this.getActivity().getApplicationContext();
+        return Objects.requireNonNull(this.getActivity()).getApplicationContext();
     }
 
     private void setupRecyclerView() {
         this.feedItemAdapter.setOnItemClickListener(onItemClickListener);
-        FeedLayoutManager layoutManager = new FeedLayoutManager(context());
-        this.rv_feed.setLayoutManager(layoutManager);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context());
+        Objects.requireNonNull(this.rv_feed).setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context(), layoutManager.getOrientation());
         this.rv_feed.addItemDecoration(dividerItemDecoration);
+
+        FeedItemDecoration sectionItemDecoration =
+                new FeedItemDecoration(0,
+                        true,
+                        feedItemAdapter);
+        this.rv_feed.addItemDecoration(sectionItemDecoration);
+
         this.rv_feed.setAdapter(feedItemAdapter);
     }
 

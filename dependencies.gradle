@@ -1,3 +1,22 @@
+/*
+ * (C) Copyright 2018.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  Contributors:
+ *      Iggor Alves
+ */
+
 ext {
     //Android
     androidBuildToolsVersion = "24.0.1"
@@ -20,6 +39,9 @@ ext {
     arrowVersion = '1.0.0'
     roomVersion = '1.0.0'
     frescoVersion = '1.9.0'
+    jodaTimeVersion = '2.9.9'
+    constraintLayoutVersion = '1.1.0'
+    designVersion = '27.1.1'
 
     //Testing
     robolectricVersion = '3.8'
@@ -43,7 +65,11 @@ ext {
             javaxAnnotation    : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
             appCompatV7        : "com.android.support:appcompat-v7:${appCompatV7Version}",
             arrow              : "com.fernandocejas:arrow:${arrowVersion}",
-            fresco             : "com.facebook.fresco:fresco:${frescoVersion}"
+            fresco             : "com.facebook.fresco:fresco:${frescoVersion}",
+            jodaTime           : "joda-time:joda-time:${jodaTimeVersion}",
+            constraintLayout   : "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
+            design             : "com.android.support:design:${designVersion}",
+            androidAnnotations : "com.android.support:support-annotations:${androidAnnotationsVersion}",
     ]
 
     presentationTestDependencies = [
@@ -80,6 +106,7 @@ ext {
             roomRuntime       : "android.arch.persistence.room:runtime:${roomVersion}",
             roomCompiler      : "android.arch.persistence.room:compiler:${roomVersion}",
             roomRxjava2       : "android.arch.persistence.room:rxjava2:${roomVersion}",
+            jodaTime          : "joda-time:joda-time:${jodaTimeVersion}",
     ]
 
     dataTestDependencies = [
