@@ -17,4 +17,6 @@
   ~      Iggor Alves
   -->
 
-<resources></resources>
+<resources>
+    <dimen name="recycler_section_header_height">55dp</dimen>
+</resources>

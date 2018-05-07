@@ -213,7 +213,7 @@ public class FeedItemListFragment extends BaseFragment implements FeedView {
         this.rv_feed.addItemDecoration(dividerItemDecoration);
 
         FeedItemDecoration sectionItemDecoration =
-                new FeedItemDecoration(0,
+                new FeedItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_section_header_height),
                         true,
                         feedItemAdapter);
         this.rv_feed.addItemDecoration(sectionItemDecoration);

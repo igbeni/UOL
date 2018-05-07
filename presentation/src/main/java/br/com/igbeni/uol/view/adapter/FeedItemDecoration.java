@@ -136,11 +136,15 @@ public class FeedItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     private String formatDate(String timeAsString) {
-        String year = timeAsString.substring(0, 4);
-        String month = timeAsString.substring(4, 6);
-        String day = timeAsString.substring(6, 8);
+        try {
+            String year = timeAsString.substring(0, 4);
+            String month = timeAsString.substring(4, 6);
+            String day = timeAsString.substring(6, 8);
 
-        return day + '/' + month + '/' + year;
+            return day + '/' + month + '/' + year;
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     public interface SectionCallback {

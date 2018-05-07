@@ -22,10 +22,11 @@ package br.com.igbeni.uol.presenter;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 
 import javax.inject.Inject;
 
@@ -147,7 +148,9 @@ public class FeedPresenter implements Presenter {
 
     @android.support.annotation.NonNull
     private Map<String, List<ItemModel>> groupFeedItemsIntoHashMap(List<ItemModel> itemModels) {
-        Map<String, List<ItemModel>> groupedHashMap = new HashMap<>();
+        Comparator<String> comparator = (s1, s2) -> Long.valueOf(s2).compareTo(Long.valueOf(s1));
+
+        Map<String, List<ItemModel>> groupedHashMap = new TreeMap<>(comparator);
 
         for (ItemModel itemModel : itemModels) {
             if (itemModel instanceof FeedItemModel) {

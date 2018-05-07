@@ -117,9 +117,9 @@ public class FeedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case TYPE_BANNER:
                 initLayoutBanner((BannerItemViewHolder) holder, position);
                 break;
-//            case TYPE_DATE:
-//                initLayoutDate((DateItemViewHolder) holder, position);
-//                break;
+            case TYPE_DATE:
+                initLayoutDate((DateItemViewHolder) holder, position);
+                break;
             default:
                 break;
         }
@@ -216,8 +216,10 @@ public class FeedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final DateItemModel dateItemModel = (DateItemModel) itemModelCollection.get(position);
 
             previousHeader = dateItemModel.getDate();
+        } else if (itemModel.getType() == Type.NEWS) {
+            final FeedItemModel feedItemModel = (FeedItemModel) itemModelCollection.get(position);
 
-            return dateItemModel.getDate();
+            previousHeader = String.valueOf(feedItemModel.getUpdated()).substring(0, 8);
         }
 
         return previousHeader;
